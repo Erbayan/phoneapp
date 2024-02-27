@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      button[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      button[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+
+      li img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+      }
+
+      .delete-form,
+      .update-form {
+        display: inline-block;
+      }
+
+      .delete-form input[type="submit"],
+      .update-form input[type="submit"] {
+        background-color: #f44336;
+        color: white;
+        padding: 8px 15px;
+        margin-right: 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+
+      .delete-form input[type="submit"]:hover,
+      .update-form input[type="submit"]:hover {
+        background-color: #d32f2f;
+      }
+
+      .update-form input[type="submit"] {
+        background-color: #2196f3;
+      }
+
+      .update-form input[type="submit"]:hover {
+        background-color: #0d47a1;
+      }
+
+      #previewImage {
+        max-width: 200px;
+        margin-top: 10px;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Admin Panel</h1>
+    <form id="addItemForm" action="/api/items" method="POST">
+      <label for="image1">Image 1:</label>
+      <input type="text" id="image1" name="images[]" required />
+      <label for="image2">Image 2:</label>
+      <input type="text" id="image2" name="images[1]" required />
+      <label for="image3">Image 3:</label>
+      <input type="text" id="image3" name="images[2]" required />
+
+      <label for="enName">English Name:</label>
+      <input type="text" id="enName" name="enNames[]" required />
+      <label for="ruName">Russian Name:</label>
+      <input type="text" id="ruName" name="ruNames[]" required />
+
+      <label for="enDescription">English Description:</label>
+      <textarea id="enDescription" name="enDescriptions[]" required></textarea>
+      <label for="ruDescription">Russian Description:</label>
+      <textarea id="ruDescription" name="ruDescriptions[]" required></textarea>
+
+      <label for="previewImage">Preview Image:</label>
+      <img id="previewImage" style="display: none" alt="Preview Image" />
+
+      <button type="submit">Add Item</button>
+    </form>
+
+    <h2>Current Items:</h2>
+    <ul>
+      <% item.forEach(function(item) { %>
+      <li>
+        <h3>
+          <%= item.names && item.names[0] && item.names[0].value %> / <%=
+          item.names && item.names[1] && item.names[1].value %>
+        </h3>
+        <p>
+          <%= item.descriptions && item.descriptions[0] &&
+          item.descriptions[0].value %>
+        </p>
+        <p>
+          <%= item.descriptions && item.descriptions[1] &&
+          item.descriptions[1].value %>
+        </p>
+        <ul>
+          <% item.images.forEach(function(image) { %>
+          <li><img src="<%= image %>" /></li>
+          <% }); %>
+        </ul>
+        <form action="/api/items/<%= item._id %>?_method=DELETE" method="POST">
+          <input type="submit" value="Delete" />
+        </form>
+        <form action="/api/items/<%= item._id %>?_method=PUT" method="POST">
+          <form action="/api/items/<%= item._id %>?_method=PUT" method="POST">
+            <label for="enNameUpdate">Name (English):</label>
+            <input
+              type="text"
+              id="enNameUpdate"
+              name="names[0][value]"
+              value="<%= item.names && item.names[0] && item.names[0].value %>"
+              required
+            /><br />
+            <input type="hidden" name="names[0][lang]" value="en" />
+
+            <label for="ruNameUpdate">Name (Russian):</label>
+            <input
+              type="text"
+              id="ruNameUpdate"
+              name="names[1][value]"
+              value="<%= item.names && item.names[1] && item.names[1].value %>"
+              required
+            /><br />
+            <input type="hidden" name="names[1][lang]" value="ru" />
+
+            <label for="enDescriptionUpdate">Description (English):</label
+            ><br />
+            <textarea
+              id="enDescriptionUpdate"
+              name="descriptions[0][value]"
+              rows="4"
+              cols="50"
+              required
+            >
+<%= item.descriptions && item.descriptions[0] && item.descriptions[0].value %></textarea
+            ><br />
+            <input type="hidden" name="descriptions[0][lang]" value="en" />
+
+            <label for="ruDescriptionUpdate">Description (Russian):</label
+            ><br />
+            <textarea
+              id="ruDescriptionUpdate"
+              name="descriptions[1][value]"
+              rows="4"
+              cols="50"
+              required
+            >
+<%= item.descriptions && item.descriptions[1] && item.descriptions[1].value %></textarea
+            ><br />
+            <input type="hidden" name="descriptions[1][lang]" value="ru" />
+
+            <input type="submit" value="Update" />
+            <input type="hidden" name="_method" value="PUT" />
+          </form>
+        </form>
+      </li>
+      <% }); %>
+    </ul>
+
+    <script>
+     
+      document.addEventListener("DOMContentLoaded", function () {
+        const addItemForm = document.getElementById("addItemForm");
+
+        addItemForm.addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(addItemForm);
+          const requestData = Object.fromEntries(formData.entries());
+
+          try {
+            const response = await fetch("/api/items", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(requestData),
+            });
+
+            if (response.ok) {
+              console.log("Item added successfully!");
+            } else {
+              throw new Error("Failed to add item");
+            }
+          } catch (error) {
+            console.error("Error adding item:", error.message);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

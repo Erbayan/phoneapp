@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+button#switchLanguage {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+strong {
+    font-weight: bold;
+}
+
+strong.itemName,
+strong.itemDescription {
+    display: block;
+    margin-bottom: 5px;
+}
+
+span.itemNameValue,
+span.itemDescriptionValue {
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+[data-lang="ru"] {
+    display: none;
+}
+
+    </style>
+</head>
+<body>
+    <button id="switchLanguage">Switch Language</button>
+
+    <h1>Main Page</h1>
+    <ul>
+        <% items.forEach((item, index) => { %>
+            <li class="language-switchable">
+                <strong>Images:</strong>
+                <% item.images.forEach(image => { %>
+                    <img src="<%= image %>" alt="Item Image">
+                <% }); %><br>
+                
+                <strong class="itemName" data-lang="en">Name (English):</strong>
+                <strong class="itemName" data-lang="ru" style="display:none;">Name (Russian):</strong>
+                <span class="itemNameValue" data-lang="en">
+                    <% const englishName = item.names.find(name => name.lang === 'en'); %>
+                    <%= englishName ? englishName.value : 'N/A' %>
+                </span>
+                <span class="itemNameValue" data-lang="ru" style="display:none;">
+                    <% const russianName = item.names.find(name => name.lang === 'ru'); %>
+                    <%= russianName ? russianName.value : 'N/A' %>
+                </span><br>
+                
+                <strong class="itemDescription" data-lang="en">Description (English):</strong>
+                <strong class="itemDescription" data-lang="ru" style="display:none;">Description (Russian):</strong>
+                <span class="itemDescriptionValue" data-lang="en">
+                    <% const englishDescription = item.descriptions.find(description => description.lang === 'en'); %>
+                    <%= englishDescription ? englishDescription.value : 'N/A' %>
+                </span>
+                <span class="itemDescriptionValue" data-lang="ru" style="display:none;">
+                    <% const russianDescription = item.descriptions.find(description => description.lang === 'ru'); %>
+                    <%= russianDescription ? russianDescription.value : 'N/A' %>
+                </span><br>
+                
+            </li>
+        <% }); %>
+    </ul>
+    <script>
+        let currentLanguage = 'en';
+
+        const switchLanguageButton = document.getElementById('switchLanguage');
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'ru' : 'en';
+            switchLanguageButton.textContent = currentLanguage === 'en' ? 'Switch to Russian' : 'Switch to English';
+
+            const languageSwitchableElements = document.querySelectorAll('.language-switchable');
+
+            languageSwitchableElements.forEach(element => {
+                const itemsToToggle = element.querySelectorAll(`[data-lang="${currentLanguage}"], [data-lang]:not([data-lang="${currentLanguage}"])`);
+                itemsToToggle.forEach(item => {
+                    
+                    item.style.display = item.style.display === 'none' ? 'inline' : 'none';
+                });
+            });
+        }
+
+        switchLanguageButton.addEventListener('click', toggleLanguage);
+    </script>
+</body>
+</html>

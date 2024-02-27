@@ -1,0 +1,106 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+        }
+        .device-info {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .device-info h2 {
+            color: #555;
+        }
+        .device-info ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .device-info ul li {
+            margin-bottom: 5px;
+        }
+        .image-container {
+            margin-left: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .search-form {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+            display: flex; 
+        }
+        .search-form input[type="text"] {
+            flex: 1; 
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px; 
+        }
+        .search-form input[type="submit"] {
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-info">
+        <div>
+            <h1><%= deviceInfo.name %></h1>
+            <h2>Quick Specifications:</h2>
+            <ul>
+                <% deviceInfo.quickSpec.forEach(spec => { %>
+                    <li><strong><%= spec.name %>:</strong> <%= spec.value %></li>
+                <% }); %>
+            </ul>
+        </div>
+        <div class="image-container">
+            <img src="<%= imageUrl %>" alt="Device Image">
+        </div>
+    </div>
+    <div class="search-form">
+        <form action="/" method="GET">
+            <input type="text" name="q" placeholder="Search Phones">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+</body>
+</html>
