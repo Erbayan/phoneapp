@@ -44,7 +44,7 @@ async function fetchPhoneId(query) {
         url: 'https://mobile-phones2.p.rapidapi.com/search',
         params: { q: query }, 
         headers: {
-            'X-RapidAPI-Key': '7c781994b7mshafa3e0988f46dcdp194e81jsnfa8a5e788ecc',
+            'X-RapidAPI-Key': RapidAPIKey,
             'X-RapidAPI-Host': 'mobile-phones2.p.rapidapi.com'
         }
     };

@@ -96,15 +96,7 @@ async function deleteItem(req, res) {
   }
 }
 
-async function renderAdminPage(req, res) {
-  try {
-    const item = await Item.find();
-    res.render('admin', { item: item });
-  } catch (error) {
-    console.error('Error rendering admin page:', error);
-    res.status(500).send('Internal Server Error');
-  }
-}
+
 
 async function getItemForEdit(req, res) {
   try {
@@ -124,4 +116,4 @@ async function getItemForEdit(req, res) {
 
 
 
-module.exports = {getItems, addItem, editItem, deleteItem, renderAdminPage, getItemForEdit};
+module.exports = {getItems, addItem, editItem, deleteItem, getItemForEdit};

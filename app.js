@@ -10,8 +10,8 @@ const authenticate = require("./middleware/authenticate");
 const Item = require("./models/item"); 
 const newsRoutes = require('./routes/newsRoutes');
 const phoneRoutes = require('./routes/phoneRoutes');
-
 const app = express();
+const createAdminUser = require('./utils/createAdmin');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -23,9 +23,10 @@ app.set("view engine", "ejs");
 
 app.use('/', authRoutes);
 app.use('/main-page', authenticate);  
+app.use('/admin', authenticate); 
 app.use('/', itemRoutes);
 app.use('/news', newsRoutes);
-app.use('/phones', phoneRoutes);
+app.use('/',phoneRoutes); 
 
 
 app.get("/login", (req, res) => {
@@ -43,28 +44,26 @@ app.get('/main-page', authenticate, async (req, res) => {
     res.status(500).send('Internal Server Error');
   } 
 });
+app.get("/logout", (req, res) => {
+  res.clearCookie("token"); 
+  res.clearCookie("adminToken"); 
+  res.redirect("/login"); 
+});
 
 
-// async function createAdminUser() {
-//   try {
-//     const existingAdmin = await User.findOne({ role: "admin" });
-//     if (!existingAdmin) {
-//       const hashedPassword = await bcrypt.hash("admin", 10); 
-//       await User.create({
-//         username: "admin",
-//         password: hashedPassword,
-//         role: "admin",
-//       });
-//       console.log("Admin user created");
-//     } else {
-//       console.log("Admin user already exists");
-//     }
-//   } catch (error) {
-//     console.error("Error creating admin user:", error);
-//   }
-// }
+app.get('/admin', authenticate, async (req, res) => {
+  if (req.isAdmin) {
+    const item = await Item.find();
 
-// createAdminUser();
+    res.render("admin",{ item: item } );
+  } else {
+    res.status(403).send("Forbidden - you do not have access to the admin panel, only admins can "); 
+  }
+});
+
+// Другие роуты административной панели
+
+createAdminUser();
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
