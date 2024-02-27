@@ -107,7 +107,7 @@ async function getItemForEdit(req, res) {
       return res.status(404).send('Item not found');
     }
 
-    res.render('admin', { item }); // Передача объекта item вторым аргументом
+    res.render('admin', { item });
   } catch (error) {
     console.error('Error fetching item for edit:', error);
     res.status(500).send('Error fetching item for edit');

@@ -61,7 +61,6 @@ app.get('/admin', authenticate, async (req, res) => {
   }
 });
 
-// Другие роуты административной панели
 
 createAdminUser();
 const PORT = process.env.PORT || 3000;

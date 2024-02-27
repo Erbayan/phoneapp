@@ -17,7 +17,7 @@ function authenticate(req, res, next) {
         } else if (adminToken) {
             const decoded = jwt.verify(adminToken, ADMIN_SECRET_KEY);
             req.user = decoded;
-            req.isAdmin = true; // Flag indicating admin status
+            req.isAdmin = true; 
         } else {
             return res.redirect("/login");
         }

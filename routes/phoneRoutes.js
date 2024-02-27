@@ -5,7 +5,7 @@ const authenticate = require('../middleware/authenticate');
 
 router.get('/', authenticate, async (req, res) => {
     try {
-        await getDeviceInfo(req, res); // Передаем управление в функцию getDeviceInfo
+        await getDeviceInfo(req, res); 
     } catch (error) {
         console.error('Error getting device info:', error);
         res.status(500).send('Internal Server Error');
